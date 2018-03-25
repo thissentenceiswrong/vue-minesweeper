@@ -1,5 +1,8 @@
 const path = require('path');
 
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 const ROOT_PATH = path.resolve(__dirname);
 const DIST_PATH = path.resolve(ROOT_PATH, './dist');
 
@@ -30,4 +33,10 @@ module.exports = {
             }
         ]
     },
+    plugins: [
+        new CleanWebpackPlugin(['dist']),
+        new HtmlWebpackPlugin({
+            template: "index.html"
+        })
+    ],
 };
