@@ -10,6 +10,10 @@
   "author": "Jeff <noojeff@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "clean-webpack-plugin": "^0.1.19",
     "cross-env": "^5.1.4",
     "css-loader": "^0.28.11",
@@ -26,7 +30,7 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --mode=development --open --hot --host=0.0.0.0 --config webpack.dev.js",
-    "build-dev": "cross-env NODE_ENV=development webpack --mode=development --progress --hide-modules  --config webpack.dev.js",
-    "build-prod": "cross-env NODE_ENV=production webpack --mode=production --progress --hide-modules  --config webpack.prod.js"
+    "dev": "cross-env NODE_ENV=development webpack --mode=development --progress --hide-modules  --config webpack.dev.js",
+    "build": "cross-env NODE_ENV=production webpack --mode=production --progress --hide-modules  --config webpack.prod.js"
   }
 }
