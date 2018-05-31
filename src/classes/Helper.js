@@ -12,7 +12,14 @@ function xyToIndex(x, y, maxX, maxY) {
 
 // todo
 function indexToxy(index, maxX, maxY) {
+    if (hasUndefined([index, maxX, maxY])) {
+        throw "Undefined param";
+    }
 
+    return {
+        x: Math.floor(index / maxY),
+        y: index % maxY
+    }
 }
 
 function hasUndefined(arr) {

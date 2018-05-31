@@ -11,6 +11,8 @@ export default class MineSweeper {
         this.numMines = mines;
         this.setMines = null;
 
+        this.isGameOver = false;
+
         /**
          * An array contains object with following keys:
          *     isRevealed
@@ -20,13 +22,25 @@ export default class MineSweeper {
          */
         this.board = null;
 
-        this.onGameUpdate = function () {
+        this.botOnGameUpdate = function () {
+        };
+
+        this.botOnGameOver = function () {
+        };
+
+        this.onGameOver = function () {
         };
 
         this.init();
     }
 
-    init() {
+    init(row, col, mines) {
+        this.numRow = row || this.numRow;
+        this.numCol = col || this.numCol;
+        this.numMines = mines || this.numMines;
+
+        this.isGameOver = false;
+
         this.setMines = new Set();
 
         this.board = new Array(this.numRow * this.numCol);
@@ -40,7 +54,6 @@ export default class MineSweeper {
         while (setMines.size !== this.numMines) {
             let x = Math.floor(Math.random() * this.numRow);
             let y = Math.floor(Math.random() * this.numCol);
-            // let mine = x * Math.pow(10, numDigits(this.numCol)) + y;
             let mine = xyToIndex(x, y, this.numRow, this.numCol);
 
             setMines.add(mine);
@@ -53,7 +66,7 @@ export default class MineSweeper {
                 let index = xyToIndex(x, y, this.numRow, this.numCol);
 
                 this.board[index] = {
-                    isRevealed: true,
+                    isRevealed: false,
                     isMine: this.setMines.has(index),
                     numMinesNearby: this.numMinesNearby(x, y)
                 };
@@ -78,40 +91,68 @@ export default class MineSweeper {
         return this.setMines.has(xyToIndex(x, y, this.numRow, this.numCol));
     }
 
+    /**
+     * Game over
+     * @param won: true if won
+     */
+    gameOver(won) {
+        this.isGameOver = true;
+
+        // reveal all mines
+        for (let each of this.setMines.values()) {
+            this.board[each].isRevealed = true;
+        }
+
+        this.onGameOver();
+        this.botOnGameOver();
+    }
+
     // Left click
     revealCell(x, y) {
+        if (this.isGameOver) {
+            return;
+        }
+
         if (this.isMine(x, y)) {
-            // todo: game over
+            // todo: flag the one you clicked
+
+            this.gameOver(false);
+            return;
         }
 
         // BFS
-        let queue = [{x, y}];
+        const queue = [{x, y}];
         while (queue.length !== 0) {
             let cur = queue.shift();
-            let curIndex = xyToIndex(x, y, this.numRow, this.numCol);
+            let curIndex = xyToIndex(cur.x, cur.y, this.numRow, this.numCol);
             let curCell = this.board[curIndex];
 
             // reveal current cell
             if (curCell.isRevealed) {
                 continue;
             }
-
             curCell.isRevealed = true;
 
             // put nearby cells into the queue
-            if (curCell.numMinesNearby === 0) {
+            if (curCell.numMinesNearby > 0) {
                 // stop when near mine
                 continue;
             }
 
-            nearbyCells(x, y, this.numRow, this.numCol).forEach((e) => {
+            nearbyCells(cur.x, cur.y, this.numRow, this.numCol).forEach((e) => {
                 queue.push(e);
             });
         }
+
+        this.botOnGameUpdate(this.board);
     }
 
     // right click
     flagCell(x, y) {
+        if (this.isGameOver) {
+            return;
+        }
 
+        // todo
     }
 }

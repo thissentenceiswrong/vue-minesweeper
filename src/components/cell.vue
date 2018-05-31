@@ -1,5 +1,8 @@
 <template>
-    <div v-bind:class="cellClassObject">{{cell}}</div>
+    <div v-bind:class="cellClassObject"
+         @click="$emit('click-cell', index)">
+        {{cell}}
+    </div>
 </template>
 
 <script>
@@ -31,6 +34,10 @@
                 };
             },
             cell: function () {
+                if (!this.item["isRevealed"]) {
+                    return '';
+                }
+
                 if (this.item["isMine"]) {
                     return 'X';
                 }

@@ -9,16 +9,19 @@
 
                   v-bind:item="item"
                   v-bind:index="index"
+                  v-on:click-cell="clickCell"
 
                   v-bind:style="cellStyleObject">
             </cell>
             <div id="clearFloat"></div>
         </div>
+        <button @click="restart">Restart</button>
     </div>
 </template>
 
 <script>
     import MineSweeper from "../classes/MineSweeper";
+    import {indexToxy} from "../classes/Helper";
 
     import cell from "./cell";
 
@@ -31,7 +34,22 @@
                 widthCell: 40
             };
         },
+        created() {
+            // bug
+            // this.minesweeper.init();
+            this.minesweeper.onGameOver = function () {
+                console.log("Game Over");
+            };
+        },
         methods: {
+            restart: function() {
+                this.minesweeper.init();
+            },
+            clickCell: function (e) {
+                let ret = indexToxy(e, this.minesweeper.numRow, this.minesweeper.numCol);
+
+                this.minesweeper.revealCell(ret.x, ret.y);
+            }
         },
         computed: {
             gameboard: function () {
