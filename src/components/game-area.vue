@@ -2,41 +2,67 @@
     <div>
         <h1>Game Area</h1>
         <div id="gameboard"
-             v-for="each in gameboard">
-            <cell
-                    v-bind:data="each"
-                    v-bind:sizing="sizing"
-            ></cell>
+             v-bind:style="containerStyleObject">
+            <cell id="cell"
+                  v-for="(item, index) in gameboard"
+                  :key="index"
+
+                  v-bind:item="item"
+                  v-bind:index="index"
+
+                  v-bind:style="cellStyleObject">
+            </cell>
+            <div id="clearFloat"></div>
         </div>
     </div>
 </template>
 
 <script>
-    import Cell from './cell';
     import MineSweeper from "../classes/MineSweeper";
+
+    import cell from "./cell";
 
     export default {
         name: "GameArea",
-        components: {Cell},
-        data: function() {
+        components: {cell},
+        data: function () {
             return {
-                minesweeper: new MineSweeper()
-            }
+                minesweeper: new MineSweeper(),
+                widthCell: 40
+            };
+        },
+        methods: {
         },
         computed: {
             gameboard: function () {
                 return this.minesweeper.board;
             },
-            sizing: function () {
+            containerStyleObject: function () {
                 return {
-                    x: this.minesweeper.numRow,
-                    y: this.minesweeper.numCol
+                    width: `${this.widthCell * this.minesweeper.numRow}px`
                 };
-            }
+            },
+            cellStyleObject: function () {
+                return {
+                    width: `${this.widthCell}px`,
+                    height: `${this.widthCell}px`
+                };
+            },
+
         }
     };
 </script>
 
 <style scoped>
+    #cell {
+        float: left;
+        display: block;
 
+        box-sizing: border-box;
+        border: 1px solid black;
+    }
+
+    #clearFloat {
+        clear: right;
+    }
 </style>

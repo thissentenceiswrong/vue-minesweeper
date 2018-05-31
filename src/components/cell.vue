@@ -1,48 +1,26 @@
 <template>
-    <div>
-        <div id="container" v-bind:style="containerStyleObject">
-            <div id="cell"
-                 v-bind:class="cellClassObject"
-                 v-bind:style="cellStyleObject"
-            >{{cell}}
-            </div>
-        </div>
-
-        <div id="clearFloat"></div>
-    </div>
+    <div v-bind:class="cellClassObject">{{cell}}</div>
 </template>
 
 <script>
     export default {
-        name: "Cell",
-        props: ["data", "sizing"],
-        data: function () {
-            return {
-                widthCell: 40,
-            };
-        },
+        name: "cell",
+        props: ["index", 'item'],
         computed: {
-            cell: function () {
-                if (this.data["isMine"]) {
-                    return 'X';
-                }
-
-                return this.data["numMinesNearby"] === 0 ? '' : this.data["numMinesNearby"];
-            },
             cellClassObject: function () {
-                if (!this.data["isRevealed"]) {
+                if (!this.item["isRevealed"]) {
                     return {
                         unrevealed: true
                     };
                 }
 
-                if (this.data["isMine"]) {
+                if (this.item["isMine"]) {
                     return {
                         isMine: true,
                     };
                 }
 
-                if (this.data["numMinesNearby"] > 0) {
+                if (this.item["numMinesNearby"] > 0) {
                     return {
                         mineNearby: true
                     };
@@ -52,22 +30,19 @@
                     empty: true
                 };
             },
-            containerStyleObject: function () {
-                return {
-                    width: `${this.widthCell * this.sizing.x}px`
-                };
-            },
-            cellStyleObject: function () {
-                return {
-                    width: `${this.widthCell}px`,
-                    height: `${this.widthCell}px`
-                };
+            cell: function () {
+                if (this.item["isMine"]) {
+                    return 'X';
+                }
+
+                return this.item["numMinesNearby"] === 0 ? '' : this.item["numMinesNearby"];
             }
         }
+
     };
 </script>
 
-<style scoped lang="scss">
+<style scoped>
     .unrevealed {
         background-color: black;
     }
@@ -82,21 +57,5 @@
 
     .empty {
         background-color: white;
-    }
-
-    #container {
-
-    }
-
-    #cell {
-        float: left;
-        display: block;
-
-        box-sizing: border-box;
-        border: 1px solid black;
-    }
-
-    #clearFloat {
-        clear: right;
     }
 </style>
