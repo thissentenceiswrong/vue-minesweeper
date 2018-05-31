@@ -2,24 +2,37 @@
     <div>
         <h1>Game Area</h1>
         <div id="gameboard"
-             v-for="each in gameboard.map">
-            <cell></cell>
+             v-for="each in gameboard">
+            <cell
+                    v-bind:data="each"
+                    v-bind:sizing="sizing"
+            ></cell>
         </div>
     </div>
 </template>
 
 <script>
-    import {mapState, mapMutations} from 'vuex';
-
     import Cell from './cell';
+    import MineSweeper from "../classes/MineSweeper";
 
     export default {
         name: "GameArea",
         components: {Cell},
+        data: function() {
+            return {
+                minesweeper: new MineSweeper()
+            }
+        },
         computed: {
-            ...mapState([
-                'gameboard',
-            ]),
+            gameboard: function () {
+                return this.minesweeper.board;
+            },
+            sizing: function () {
+                return {
+                    x: this.minesweeper.numRow,
+                    y: this.minesweeper.numCol
+                };
+            }
         }
     };
 </script>
