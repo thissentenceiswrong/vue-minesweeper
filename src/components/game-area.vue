@@ -37,18 +37,23 @@
         created() {
             // bug
             // this.minesweeper.init();
-            this.minesweeper.onGameOver = function () {
-                console.log("Game Over");
+            this.minesweeper.onGameOver = function (won) {
+                console.log("Game Over, you " + (won ? "won" : "lose"));
             };
         },
         methods: {
-            restart: function() {
+            restart: function () {
                 this.minesweeper.init();
             },
             clickCell: function (e) {
                 let ret = indexToxy(e, this.minesweeper.numRow, this.minesweeper.numCol);
 
                 this.minesweeper.revealCell(ret.x, ret.y);
+            },
+            flagCell: function (e) {
+                let ret = indexToxy(e, this.minesweeper.numRow, this.minesweeper.numCol);
+
+                this.minesweeper.flagCell(ret.x, ret.y);
             }
         },
         computed: {

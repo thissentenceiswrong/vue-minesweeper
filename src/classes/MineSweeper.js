@@ -17,6 +17,7 @@ export default class MineSweeper {
          * An array contains object with following keys:
          *     isRevealed
          *     isMine
+         *     isFlaged
          *     numMinesNearby
          * @type {[Object]}
          */
@@ -68,6 +69,7 @@ export default class MineSweeper {
                 this.board[index] = {
                     isRevealed: false,
                     isMine: this.setMines.has(index),
+                    isFlaged: false,
                     numMinesNearby: this.numMinesNearby(x, y)
                 };
             }
@@ -103,8 +105,12 @@ export default class MineSweeper {
             this.board[each].isRevealed = true;
         }
 
-        this.onGameOver();
-        this.botOnGameOver();
+        this.onGameOver(won);
+        this.botOnGameOver(won);
+    }
+
+    checkWinningCondition() {
+        return this.board.filter(({isRevealed}) => !isRevealed).length === this.numMines;
     }
 
     // Left click
@@ -115,7 +121,6 @@ export default class MineSweeper {
 
         if (this.isMine(x, y)) {
             // todo: flag the one you clicked
-
             this.gameOver(false);
             return;
         }
@@ -144,15 +149,22 @@ export default class MineSweeper {
             });
         }
 
-        this.botOnGameUpdate(this.board);
+        // check if won
+        if (this.checkWinningCondition()) {
+            this.gameOver(true);
+        } else {
+            // continue
+            this.botOnGameUpdate(this.board);
+        }
     }
 
-    // right click
+    // Right click
     flagCell(x, y) {
         if (this.isGameOver) {
             return;
         }
 
-        // todo
+        let index = xyToIndex(x, y, this.numRow, this.numCol);
+        this.board[index].isFlaged = true;
     }
 }

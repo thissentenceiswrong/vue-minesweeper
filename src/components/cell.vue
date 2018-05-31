@@ -1,6 +1,7 @@
 <template>
     <div v-bind:class="cellClassObject"
-         @click="$emit('click-cell', index)">
+         @click="$emit('click-cell', index)"
+    >
         {{cell}}
     </div>
 </template>
