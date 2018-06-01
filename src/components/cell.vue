@@ -39,10 +39,6 @@
                     return '';
                 }
 
-                if (this.item["isMine"]) {
-                    return 'X';
-                }
-
                 return this.item["numMinesNearby"] === 0 ? '' : this.item["numMinesNearby"];
             }
         }

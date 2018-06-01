@@ -31,19 +31,19 @@
         data: function () {
             return {
                 minesweeper: new MineSweeper(),
-                widthCell: 40
+                widthCell: 40,
+
             };
         },
         created() {
-            // bug
-            // this.minesweeper.init();
-            this.minesweeper.onGameOver = function (won) {
-                console.log("Game Over, you " + (won ? "won" : "lose"));
-            };
+            // this.minesweeper.onGameOver = function (won) {
+            //     console.log("Game Over, you " + (won ? "won" : "lose"));
+            // };
         },
         methods: {
             restart: function () {
-                this.minesweeper.init();
+                // this.minesweeper.init();
+                this.minesweeper = new MineSweeper();
             },
             clickCell: function (e) {
                 let ret = indexToxy(e, this.minesweeper.numRow, this.minesweeper.numCol);
@@ -58,7 +58,7 @@
         },
         computed: {
             gameboard: function () {
-                return this.minesweeper.board;
+                return this.minesweeper.gameboard;
             },
             containerStyleObject: function () {
                 return {

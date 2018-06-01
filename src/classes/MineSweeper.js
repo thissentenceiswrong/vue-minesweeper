@@ -1,7 +1,13 @@
 import {xyToIndex, nearbyCells} from "./Helper";
 
+function idle() {}
+
 export default class MineSweeper {
-    constructor(row, col, mines) {
+    constructor(onGameOver, botOnGameUpdate, botOnGameOver, row, col, mines) {
+        onGameOver = onGameOver || idle;
+        botOnGameUpdate = botOnGameUpdate || idle;
+        botOnGameOver = botOnGameOver || idle;
+
         row = row || 9;
         col = col || 9;
         mines = mines || 9;
@@ -9,7 +15,7 @@ export default class MineSweeper {
         this.numRow = row;
         this.numCol = col;
         this.numMines = mines;
-        this.setMines = null;
+        this.setMines = new Set();
 
         this.isGameOver = false;
 
@@ -21,30 +27,11 @@ export default class MineSweeper {
          *     numMinesNearby
          * @type {[Object]}
          */
-        this.board = null;
+        this.gameboard = new Array(this.numRow * this.numCol);
 
-        this.botOnGameUpdate = function () {
-        };
-
-        this.botOnGameOver = function () {
-        };
-
-        this.onGameOver = function () {
-        };
-
-        this.init();
-    }
-
-    init(row, col, mines) {
-        this.numRow = row || this.numRow;
-        this.numCol = col || this.numCol;
-        this.numMines = mines || this.numMines;
-
-        this.isGameOver = false;
-
-        this.setMines = new Set();
-
-        this.board = new Array(this.numRow * this.numCol);
+        this.botOnGameUpdate = botOnGameUpdate;
+        this.botOnGameOver = botOnGameOver;
+        this.onGameOver = onGameOver;
 
         this.generateMines();
         this.generateBoard();
@@ -66,7 +53,7 @@ export default class MineSweeper {
             for (let y = 0; y < this.numCol; y++) {
                 let index = xyToIndex(x, y, this.numRow, this.numCol);
 
-                this.board[index] = {
+                this.gameboard[index] = {
                     isRevealed: false,
                     isMine: this.setMines.has(index),
                     isFlaged: false,
@@ -102,7 +89,7 @@ export default class MineSweeper {
 
         // reveal all mines
         for (let each of this.setMines.values()) {
-            this.board[each].isRevealed = true;
+            this.gameboard[each].isRevealed = true;
         }
 
         this.onGameOver(won);
@@ -110,7 +97,7 @@ export default class MineSweeper {
     }
 
     checkWinningCondition() {
-        return this.board.filter(({isRevealed}) => !isRevealed).length === this.numMines;
+        return this.gameboard.filter(({isRevealed}) => !isRevealed).length === this.numMines;
     }
 
     // Left click
@@ -130,7 +117,7 @@ export default class MineSweeper {
         while (queue.length !== 0) {
             let cur = queue.shift();
             let curIndex = xyToIndex(cur.x, cur.y, this.numRow, this.numCol);
-            let curCell = this.board[curIndex];
+            let curCell = this.gameboard[curIndex];
 
             // reveal current cell
             if (curCell.isRevealed) {
@@ -154,7 +141,7 @@ export default class MineSweeper {
             this.gameOver(true);
         } else {
             // continue
-            this.botOnGameUpdate(this.board);
+            this.botOnGameUpdate(this.gameboard);
         }
     }
 
@@ -165,6 +152,6 @@ export default class MineSweeper {
         }
 
         let index = xyToIndex(x, y, this.numRow, this.numCol);
-        this.board[index].isFlaged = true;
+        this.gameboard[index].isFlaged = true;
     }
 }
