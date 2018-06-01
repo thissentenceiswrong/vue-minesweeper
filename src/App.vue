@@ -1,6 +1,6 @@
 <template>
     <div>
-        <start-setting></start-setting>
+        <start-setting v-if="false"></start-setting>
         <game-area></game-area>
     </div>
 </template>

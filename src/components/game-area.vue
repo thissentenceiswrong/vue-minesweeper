@@ -10,6 +10,7 @@
                   v-bind:item="item"
                   v-bind:index="index"
                   v-on:click-cell="clickCell"
+                  v-on:flag-cell="flagCell"
 
                   v-bind:style="cellStyleObject">
             </cell>
@@ -32,7 +33,6 @@
             return {
                 minesweeper: new MineSweeper(),
                 widthCell: 40,
-
             };
         },
         created() {
@@ -68,7 +68,8 @@
             cellStyleObject: function () {
                 return {
                     width: `${this.widthCell}px`,
-                    height: `${this.widthCell}px`
+                    height: `${this.widthCell}px`,
+                    'font-size': '30px'
                 };
             },
 
@@ -86,6 +87,6 @@
     }
 
     #clearFloat {
-        clear: right;
+        clear: left;
     }
 </style>

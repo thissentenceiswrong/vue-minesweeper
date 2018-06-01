@@ -1,9 +1,10 @@
 import {xyToIndex, nearbyCells} from "./Helper";
 
-function idle() {}
+function idle() {
+}
 
 export default class MineSweeper {
-    constructor(onGameOver, botOnGameUpdate, botOnGameOver, row, col, mines) {
+    constructor(row, col, mines, onGameOver, botOnGameUpdate, botOnGameOver) {
         onGameOver = onGameOver || idle;
         botOnGameUpdate = botOnGameUpdate || idle;
         botOnGameOver = botOnGameOver || idle;
@@ -97,7 +98,18 @@ export default class MineSweeper {
     }
 
     checkWinningCondition() {
-        return this.gameboard.filter(({isRevealed}) => !isRevealed).length === this.numMines;
+        // only mines are left unrevealed
+        if (this.gameboard.filter(({isRevealed}) => !isRevealed).length === this.numMines) {
+            return true;
+        }
+
+        // or iff all mines are flaged
+        const flaged = this.gameboard.filter(({isFlaged}) => isFlaged);
+        if (flaged.length !== this.numMines) {
+            return false;
+        }
+
+        return flaged.filter(({isMine}) => isMine).length === this.numMines;
     }
 
     // Left click
@@ -152,6 +164,14 @@ export default class MineSweeper {
         }
 
         let index = xyToIndex(x, y, this.numRow, this.numCol);
-        this.gameboard[index].isFlaged = true;
+        this.gameboard[index].isFlaged = !this.gameboard[index].isFlaged;
+
+        // check if won
+        if (this.checkWinningCondition()) {
+            this.gameOver(true);
+        } else {
+            // continue
+            this.botOnGameUpdate(this.gameboard);
+        }
     }
 }
