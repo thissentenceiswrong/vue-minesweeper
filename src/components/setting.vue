@@ -10,7 +10,7 @@
 
 <script>
     export default {
-        name: "StartSetting",
+        name: "Setting",
         data: function () {
             return {
                 row: 0,

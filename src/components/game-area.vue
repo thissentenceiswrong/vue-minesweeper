@@ -1,14 +1,14 @@
 <template>
     <div>
         <h1>Game Area</h1>
-        <div id="gameboard"
-             v-bind:style="containerStyleObject">
+        <div id="gameboard" v-bind:style="containerStyleObject">
             <cell id="cell"
                   v-for="(item, index) in gameboard"
                   :key="index"
 
                   v-bind:item="item"
                   v-bind:index="index"
+
                   v-on:click-cell="clickCell"
                   v-on:flag-cell="flagCell"
 
@@ -31,7 +31,7 @@
         components: {cell},
         data: function () {
             return {
-                minesweeper: new MineSweeper(),
+                minesweeper: null,
                 widthCell: 40,
             };
         },
@@ -39,10 +39,10 @@
             // this.minesweeper.onGameOver = function (won) {
             //     console.log("Game Over, you " + (won ? "won" : "lose"));
             // };
+            this.restart();
         },
         methods: {
             restart: function () {
-                // this.minesweeper.init();
                 this.minesweeper = new MineSweeper();
             },
             clickCell: function (e) {

@@ -11,38 +11,79 @@
     export default {
         name: "cell",
         props: ["index", 'item'],
+        data: function() {
+            return {
+                isGameOver: false,
+                isWon: false,
+                // index of mine triggered by user
+                mineTriggered: null
+            };
+        },
+        methods: {
+            gameOver: function(won, mineTriggered) {
+                this.isGameOver = true;
+                this.isWon = won;
+                this.mineTriggered = mineTriggered;
+            }
+        },
         computed: {
             cellClassObject: function () {
-                if (!this.item["isRevealed"]) {
-                    if (this.item["isFlaged"]) {
-                        return {
-                            flaged: true
-                        };
-                    }
+                if (this.state) {
+                    // if gameover
 
-                    return {
-                        unrevealed: true
-                    };
-                }
-
-                if (this.item["isMine"]) {
-                    if (this.item["isFlaged"]) {
+                    // flaged, right / mine, flaged
+                    if (this.item.isMine && this.item.isFlaged) {
                         return {
                             correctFlag: true
                         };
                     }
 
-                    return {
-                        isMine: true,
-                    };
+                    // flaged, wrong
+                    if (!this.item.isMine && this.item.isFlaged) {
+                        return {
+                            wrongFlag: true
+                        };
+                    }
+
+                    // mine, missed
+                    if (this.item.isMine && !this.item.isFlaged) {
+                        return {
+                            isMine: true
+                        };
+                    }
+
+                    // mine, triggered
+                    if (this.mineTriggered === this.index) {
+                        return {
+                            mineTriggered: true
+                        };
+                    }
+
+                } else {
+                    // unrevealed, normal
+                    if (!this.item.isRevealed) {
+
+                        // unrevealed, flaged
+                        if (this.item.isFlaged) {
+                            return {
+                                flaged: true
+                            };
+                        }
+
+                        return {
+                            unrevealed: true
+                        };
+                    } else {
+                        // number
+                        if (this.item["numMinesNearby"] > 0) {
+                            return {
+                                mineNearby: true
+                            };
+                        }
+                    }
                 }
 
-                if (this.item["numMinesNearby"] > 0) {
-                    return {
-                        mineNearby: true
-                    };
-                }
-
+                // number == 0
                 return {
                     empty: true
                 };
@@ -84,6 +125,10 @@
 
     .isMine {
         background-color: red;
+    }
+
+    .mineTriggered {
+        background-color: fuchsia;
     }
 
     .mineNearby {

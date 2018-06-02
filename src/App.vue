@@ -1,16 +1,16 @@
 <template>
     <div>
-        <start-setting v-if="false"></start-setting>
+        <setting v-if="false"></setting>
         <game-area></game-area>
     </div>
 </template>
 
 <script>
-    import StartSetting from 'components/start-setting';
+    import Setting from 'components/setting';
     import GameArea from 'components/game-area';
 
     export default {
-        components: {StartSetting, GameArea},
+        components: {Setting, GameArea},
         name: "app",
         // computed: {
         // },
