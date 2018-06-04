@@ -136,6 +136,7 @@ export default class MineSweeper {
                 continue;
             }
             curCell.isRevealed = true;
+            curCell.isFlaged = false;
 
             // put nearby cells into the queue
             if (curCell.numMinesNearby > 0) {

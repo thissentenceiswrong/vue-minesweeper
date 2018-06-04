@@ -3,15 +3,26 @@
          v-bind:class="cellClassObject"
          @click="$emit('click-cell', index)"
          @contextmenu.prevent="$emit('flag-cell', index)">
-        {{cell}}
+        <!--refactor into different components-->
+        <div id="number">
+            {{cell}}
+        </div>
+        <div id="icons" v-if="false">
+            <i id="iconBomb" class="fas fa-bomb"></i>
+            <i id="iconFlag" class="fas fa-flag"></i>
+            <div id="iconWrongFlag">
+                <i id="cross" class="fas fa-times"></i>
+                <i id="base" class="fas fa-flag"></i>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     export default {
         name: "cell",
-        props: ["index", 'item'],
-        data: function() {
+        props: ["index", 'item', "gamestate"],
+        data: function () {
             return {
                 isGameOver: false,
                 isWon: false,
@@ -19,16 +30,10 @@
                 mineTriggered: null
             };
         },
-        methods: {
-            gameOver: function(won, mineTriggered) {
-                this.isGameOver = true;
-                this.isWon = won;
-                this.mineTriggered = mineTriggered;
-            }
-        },
+        methods: {},
         computed: {
             cellClassObject: function () {
-                if (this.state) {
+                if (this.gamestate.isGameOver) {
                     // if gameover
 
                     // flaged, right / mine, flaged
@@ -59,27 +64,27 @@
                         };
                     }
 
-                } else {
-                    // unrevealed, normal
-                    if (!this.item.isRevealed) {
+                }
 
-                        // unrevealed, flaged
-                        if (this.item.isFlaged) {
-                            return {
-                                flaged: true
-                            };
-                        }
+                // unrevealed, normal
+                if (!this.item.isRevealed) {
 
+                    // unrevealed, flaged
+                    if (this.item.isFlaged) {
                         return {
-                            unrevealed: true
+                            flaged: true
                         };
-                    } else {
-                        // number
-                        if (this.item["numMinesNearby"] > 0) {
-                            return {
-                                mineNearby: true
-                            };
-                        }
+                    }
+
+                    return {
+                        unrevealed: true
+                    };
+                } else {
+                    // number
+                    if (this.item["numMinesNearby"] > 0) {
+                        return {
+                            mineNearby: true
+                        };
                     }
                 }
 

@@ -8,6 +8,7 @@
 
                   v-bind:item="item"
                   v-bind:index="index"
+                  v-bind:gamestate="gamestate"
 
                   v-on:click-cell="clickCell"
                   v-on:flag-cell="flagCell"
@@ -33,17 +34,19 @@
             return {
                 minesweeper: null,
                 widthCell: 40,
+                onGameOver: (function (vueObj) {
+                    return function (won) {
+                        console.log("Game Over, you " + (won ? "won" : "lose"));
+                    };
+                })(this)
             };
         },
         created() {
-            // this.minesweeper.onGameOver = function (won) {
-            //     console.log("Game Over, you " + (won ? "won" : "lose"));
-            // };
             this.restart();
         },
         methods: {
             restart: function () {
-                this.minesweeper = new MineSweeper();
+                this.minesweeper = new MineSweeper(9, 9, 9, this.onGameOver);
             },
             clickCell: function (e) {
                 let ret = indexToxy(e, this.minesweeper.numRow, this.minesweeper.numCol);
@@ -59,6 +62,16 @@
         computed: {
             gameboard: function () {
                 return this.minesweeper.gameboard;
+            },
+            /**
+             * isGameOver: {bool}
+             * isWon: {bool}
+             * mineTriggered: {number|null} an index
+             */
+            gamestate: function () {
+                return {
+                    isGameOver: this.minesweeper.isGameOver
+                };
             },
             containerStyleObject: function () {
                 return {
