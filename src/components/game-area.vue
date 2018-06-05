@@ -1,6 +1,10 @@
 <template>
     <div>
         <h1>Game Area</h1>
+        <div id="gamestatus">
+            <div id="mineLeft">Mines Left: {{numMinesLeft}}</div>
+            <div id="gameover">{{ strGameOver }}</div>
+        </div>
         <div id="gameboard" v-bind:style="containerStyleObject">
             <cell id="cell"
                   v-for="(item, index) in gameboard"
@@ -34,11 +38,23 @@
             return {
                 minesweeper: null,
                 widthCell: 40,
+                strGameOver: "",
                 onGameOver: (function (vueObj) {
                     return function (won) {
-                        console.log("Game Over, you " + (won ? "won" : "lose"));
+                        const str = "Game Over! You " + (won ? "WIN" : "LOST");
+                        vueObj.strGameOver = str;
                     };
-                })(this)
+                })(this),
+                botOnGameUpdate: (function (vueObj) {
+                    return function (gameboard) {
+
+                    };
+                })(this),
+                botOnGameOver: (function (vueObj) {
+                    return function (won) {
+
+                    };
+                })(this),
             };
         },
         created() {
@@ -46,6 +62,7 @@
         },
         methods: {
             restart: function () {
+                this.strGameOver = "";
                 this.minesweeper = new MineSweeper(9, 9, 10, this.onGameOver);
             },
             clickCell: function (e) {
@@ -78,7 +95,12 @@
                     'font-size': '30px'
                 };
             },
-
+            numMinesLeft: function() {
+                return this.minesweeper.numMines
+                    - this.minesweeper.gameboard
+                        .filter(({isFlaged}) => isFlaged)
+                        .length;
+            }
         }
     };
 </script>
