@@ -9,7 +9,7 @@ try {
     fs.removeSync(dir_page);
 
     // Copy dist into ghpage
-    fs.copySync('dist', path.resolve(dir_page, 'dist'));
+    fs.copySync('dist', dir_page);
 
     ghpages.publish(dir_page, function(err) {
         console.log(err);

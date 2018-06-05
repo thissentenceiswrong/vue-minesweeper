@@ -165,6 +165,10 @@ export default class MineSweeper {
         }
 
         let index = xyToIndex(x, y, this.numRow, this.numCol);
+        if (this.gameboard[index].isRevealed) {
+            return;
+        }
+
         this.gameboard[index].isFlaged = !this.gameboard[index].isFlaged;
 
         // check if won

@@ -46,7 +46,7 @@
         },
         methods: {
             restart: function () {
-                this.minesweeper = new MineSweeper(9, 9, 9, this.onGameOver);
+                this.minesweeper = new MineSweeper(9, 9, 10, this.onGameOver);
             },
             clickCell: function (e) {
                 let ret = indexToxy(e, this.minesweeper.numRow, this.minesweeper.numCol);
@@ -89,6 +89,10 @@
         display: block;
 
         box-sizing: border-box;
+    }
+
+    #gameboard {
+        border: 5px solid gray;
     }
 
     #clearFloat {

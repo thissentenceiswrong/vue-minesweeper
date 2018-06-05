@@ -16,5 +16,7 @@
         width: 40px;
 
         background-color: black;
+
+        cursor: pointer;
     }
 </style>

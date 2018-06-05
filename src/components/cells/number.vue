@@ -19,6 +19,8 @@
         text-align: center;
         line-height: 40px;
         font-size: 30px;
+
+        user-select: none;
     }
 
     .gray {
