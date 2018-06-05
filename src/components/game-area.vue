@@ -8,7 +8,7 @@
 
                   v-bind:item="item"
                   v-bind:index="index"
-                  v-bind:gamestate="gamestate"
+                  v-bind:gameover="gameover"
 
                   v-on:click-cell="clickCell"
                   v-on:flag-cell="flagCell"
@@ -63,15 +63,8 @@
             gameboard: function () {
                 return this.minesweeper.gameboard;
             },
-            /**
-             * isGameOver: {bool}
-             * isWon: {bool}
-             * mineTriggered: {number|null} an index
-             */
-            gamestate: function () {
-                return {
-                    isGameOver: this.minesweeper.isGameOver
-                };
+            gameover: function () {
+                return this.minesweeper.isGameOver;
             },
             containerStyleObject: function () {
                 return {

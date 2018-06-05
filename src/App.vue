@@ -11,11 +11,7 @@
 
     export default {
         components: {Setting, GameArea},
-        name: "app",
-        // computed: {
-        // },
-        // methods: {
-        // },
+        name: "app"
     };
 </script>
 
