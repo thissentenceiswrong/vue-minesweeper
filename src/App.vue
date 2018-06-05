@@ -16,4 +16,7 @@
 </script>
 
 <style>
+    div {
+        font-family: Helvetica, cursive;
+    }
 </style>

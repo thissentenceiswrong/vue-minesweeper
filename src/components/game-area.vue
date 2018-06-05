@@ -2,7 +2,7 @@
     <div>
         <h1>Game Area</h1>
         <div id="gamestatus">
-            <div id="mineLeft">Mines Left: {{numMinesLeft}}</div>
+            <div id="mineLeft">Mine(s) Left: {{numMinesLeft}}</div>
             <div id="gameover">{{ strGameOver }}</div>
         </div>
         <div id="gameboard" v-bind:style="containerStyleObject">
