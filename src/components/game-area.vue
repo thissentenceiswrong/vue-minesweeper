@@ -72,7 +72,7 @@
                 this.gamestate.isGameOver = false;
                 this.gamestate.isWon = false;
                 this.strGameOver = "";
-                this.minesweeper = new MineSweeper(5, 5, 4, this.onGameOver);
+                this.minesweeper = new MineSweeper(9, 9, 10, this.onGameOver);
             },
             /**
              * User left click one of the cells

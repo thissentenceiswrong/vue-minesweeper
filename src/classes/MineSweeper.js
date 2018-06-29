@@ -13,9 +13,9 @@ export default class MineSweeper {
         col = col || 9;
         mines = mines || 9;
 
-        this.numRow = row;
-        this.numCol = col;
-        this.numMines = mines;
+        this.numRow = Math.max(row, 0);
+        this.numCol = Math.max(col, 0);
+        this.numMines = Math.min(mines, this.numRow * this.numCol);
         this.setMines = new Set();
 
         this.isGameOver = false;
@@ -40,10 +40,14 @@ export default class MineSweeper {
 
     generateMines() {
         const setMines = this.setMines;
-        while (setMines.size !== this.numMines) {
-            let x = Math.floor(Math.random() * this.numRow);
-            let y = Math.floor(Math.random() * this.numCol);
-            let mine = xyToIndex(x, y, this.numRow, this.numCol);
+
+        for (let lop = 0; lop < this.numMines; lop++) {
+            // generate a random number range in [0, length)
+            let mine = Math.floor(Math.random() * (this.gameboard.length - lop));
+
+            while (setMines.has(mine)) {
+                mine = (mine + 1) % this.gameboard.length;
+            }
 
             setMines.add(mine);
         }
