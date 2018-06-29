@@ -1,5 +1,7 @@
 import {xyToIndex, nearbyCells} from "./Helper";
 
+import shuffle from "shuffle-array"
+
 function idle() {
 }
 
@@ -15,7 +17,7 @@ export default class MineSweeper {
 
         this.numRow = Math.max(row, 0);
         this.numCol = Math.max(col, 0);
-        this.numMines = Math.min(mines, this.numRow * this.numCol);
+        this.numMines = Math.min(mines, this.numRow * this.numCol - 1);
         this.setMines = new Set();
 
         this.isGameOver = false;
@@ -38,18 +40,40 @@ export default class MineSweeper {
         this.generateBoard();
     }
 
-    generateMines() {
+    /**
+     * 笨方法生成雷
+     */
+    generateMinesTheDullWay() {
         const setMines = this.setMines;
 
         for (let lop = 0; lop < this.numMines; lop++) {
             // generate a random number range in [0, length)
-            let mine = Math.floor(Math.random() * (this.gameboard.length - lop));
+            let mine = Math.floor(Math.random() * this.gameboard.length);
 
             while (setMines.has(mine)) {
                 mine = (mine + 1) % this.gameboard.length;
             }
 
             setMines.add(mine);
+        }
+    }
+
+    /**
+     * 乱序，并取前k个作为雷
+     * todo: make this for-free
+     */
+    generateMines() {
+        const setMines = this.setMines;
+
+        // init array
+        let arr = [];
+        for (let lop = 0; lop < this.gameboard.length; lop++) {
+            arr.push(lop);
+        }
+        shuffle(arr);
+
+        for (let lop = 0; lop < this.numMines; lop++) {
+            setMines.add(arr[lop]);
         }
     }
 
