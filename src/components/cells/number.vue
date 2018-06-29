@@ -1,6 +1,8 @@
 <template>
-    <div id="number" v-bind:class="{gray: number !== ''}">
-        {{number}}
+    <div id="number" v-bind:class="{gray: number !== 0}">
+        <div v-show="number">
+            {{number}}
+        </div>
     </div>
 </template>
 

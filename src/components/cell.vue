@@ -5,9 +5,10 @@
         <!--refactor into different components-->
         <!--last 3 bindings are props-->
         <component v-bind:is="currentCell"
-                   v-bind:number="number"
+
+                   v-bind:number="numMinesNearby"
                    v-bind:wrong="wrongFlag"
-                   v-bind:gameover="gameover"
+                   v-bind:gamestate="gamestate"
         >
         </component>
     </div>
@@ -21,32 +22,43 @@
 
     export default {
         name: "cell",
-        props: ["index", 'item', "gameover"],
+        props: ["index", 'item', "gamestate"],
         components: {flag, mine, number, unrevealed},
         methods: {},
         computed: {
+            /**
+             * return true if player flag the wrong cell?
+             */
             wrongFlag: function () {
                 return this.gameover ? !this.item.isMine : false;
             },
+            /**
+             * Type of current cell
+             * Return one of the following:
+             * unrevealed
+             * number
+             * flag
+             * mine
+             */
             currentCell: function () {
-                if (this.item.isFlaged) {
+                // if player won, show all mines as flaged
+                // since the player has won, he must have flagged all mines correctly
+                if ((this.gamestate.isWon && this.item.isMine) || this.item.isFlaged) {
                     return "flag";
                 }
 
-                if (!this.item.isRevealed) {
-                    return "unrevealed";
+                if (this.item.isRevealed) {
+                    return this.item.isMine ? "mine" : "number";
                 }
 
-                // revealed
-                if (this.item.isMine) {
-                    return "mine";
-                }
-
-                return "number";
-            }
-            ,
-            number: function () {
-                return this.item["numMinesNearby"] === 0 ? '' : this.item["numMinesNearby"];
+                return "unrevealed";
+            },
+            /**
+             * Number of mines nearby
+             * @returns {number}
+             */
+            numMinesNearby: function () {
+                return this.item["numMinesNearby"];
             }
         }
 

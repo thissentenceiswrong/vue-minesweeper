@@ -12,7 +12,7 @@
 
                   v-bind:item="item"
                   v-bind:index="index"
-                  v-bind:gameover="gameover"
+                  v-bind:gamestate="gamestate"
 
                   v-on:click-cell="clickCell"
                   v-on:flag-cell="flagCell"
@@ -38,10 +38,17 @@
             return {
                 minesweeper: null,
                 widthCell: 40,
+                gamestate: {
+                    isGameOver: false,
+                    isWon: false
+                },
                 strGameOver: "",
                 onGameOver: (function (vueObj) {
                     return function (won) {
-                        const str = "Game Over! You " + (won ? "WIN" : "LOST");
+                        vueObj.gamestate.isGameOver = true;
+                        vueObj.gamestate.isWon = won;
+
+                        const str = "Game Over! You " + (won ? "WIN" : "LOSE");
                         vueObj.strGameOver = str;
                     };
                 })(this),
@@ -62,14 +69,24 @@
         },
         methods: {
             restart: function () {
+                this.gamestate.isGameOver = false;
+                this.gamestate.isWon = false;
                 this.strGameOver = "";
-                this.minesweeper = new MineSweeper(9, 9, 10, this.onGameOver);
+                this.minesweeper = new MineSweeper(5, 5, 4, this.onGameOver);
             },
+            /**
+             * User left click one of the cells
+             * @param e: index of the cell clicked
+             */
             clickCell: function (e) {
                 let ret = indexToxy(e, this.minesweeper.numRow, this.minesweeper.numCol);
 
                 this.minesweeper.revealCell(ret.x, ret.y);
             },
+            /**
+             * User right click one of the cells
+             * @param e: index of the cell clicked
+             */
             flagCell: function (e) {
                 let ret = indexToxy(e, this.minesweeper.numRow, this.minesweeper.numCol);
 
@@ -79,9 +96,6 @@
         computed: {
             gameboard: function () {
                 return this.minesweeper.gameboard;
-            },
-            gameover: function () {
-                return this.minesweeper.isGameOver;
             },
             containerStyleObject: function () {
                 return {

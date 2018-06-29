@@ -10,7 +10,13 @@ function xyToIndex(x, y, maxX, maxY) {
     return maxY * x + y;
 }
 
-// todo
+/**
+ * Convert index in range [0, x*y] to two number x and y
+ * @param index
+ * @param maxX
+ * @param maxY
+ * @returns {{x: number, y: number}}
+ */
 function indexToxy(index, maxX, maxY) {
     if (hasUndefined([index, maxX, maxY])) {
         throw "Undefined param";

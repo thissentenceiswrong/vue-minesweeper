@@ -8,24 +8,14 @@
 <script>
     export default {
         name: "flag",
-        props: ["wrong", "gameover"],
+        props: ["wrong", "gamestate"],
         computed: {
             objClass: function () {
-                if (this.gameover) {
-                    if (this.wrong) {
-                        // return {
-                            // red: true
-                        // };
-                    } else {
-                        return {
-                            green: true
-                        };
-                    }
-                } else {
-                    return {
-                        yellow: true
-                    };
-                }
+                return {
+                    flaged: !this.gamestate.isGameOver,
+                    wrongFlag: this.gamestate.isGameOver && this.wrong,
+                    rightFlag: this.gamestate.isGameOver && !this.wrong
+                };
             }
         }
     };
@@ -60,11 +50,18 @@
         }
     }
 
-    .yellow {
+    /*when playing*/
+    .flaged {
         background-color: yellow;
     }
 
-    .green {
+    /*when game over and is mine*/
+    .rightFlag {
         background-color: green;
+    }
+
+    /*when game over and is not mine*/
+    .wrongFlag {
+        background-color: blue;
     }
 </style>
