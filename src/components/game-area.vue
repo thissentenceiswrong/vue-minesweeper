@@ -112,7 +112,7 @@
             numMinesLeft: function() {
                 return this.minesweeper.numMines
                     - this.minesweeper.gameboard
-                        .filter(({isFlaged}) => isFlaged)
+                        .filter(({isFlagged}) => isFlagged)
                         .length;
             }
         }

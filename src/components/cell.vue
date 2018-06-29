@@ -30,7 +30,7 @@
              * return true if player flag the wrong cell?
              */
             wrongFlag: function () {
-                return this.gameover ? !this.item.isMine : false;
+                return this.gamestate.isGameOver ? !this.item.isMine : false;
             },
             /**
              * Type of current cell
@@ -41,9 +41,7 @@
              * mine
              */
             currentCell: function () {
-                // if player won, show all mines as flaged
-                // since the player has won, he must have flagged all mines correctly
-                if ((this.gamestate.isWon && this.item.isMine) || this.item.isFlaged) {
+                if (this.item.isFlagged) {
                     return "flag";
                 }
 

@@ -24,7 +24,7 @@ export default class MineSweeper {
          * An array contains object with following keys:
          *     isRevealed
          *     isMine
-         *     isFlaged
+         *     isFlagged
          *     numMinesNearby
          * @type {[Object]}
          */
@@ -57,7 +57,7 @@ export default class MineSweeper {
                 this.gameboard[index] = {
                     isRevealed: false,
                     isMine: this.setMines.has(index),
-                    isFlaged: false,
+                    isFlagged: false,
                     numMinesNearby: this.numMinesNearby(x, y)
                 };
             }
@@ -98,18 +98,23 @@ export default class MineSweeper {
     }
 
     checkWinningCondition() {
-        // only mines are left unrevealed
+        /*
+        winning condition:
+        Pre condition: all cells must be revealed, except mines
+        num of flagged = num of mine
+         */
         if (this.gameboard.filter(({isRevealed}) => !isRevealed).length === this.numMines) {
+            // flag all mines
+            this.gameboard
+                .filter(({isMine}) => isMine)
+                .map(data => {
+                    data.isFlagged = true;
+                });
+
             return true;
         }
 
-        // or iff all mines are flaged
-        const flaged = this.gameboard.filter(({isFlaged}) => isFlaged);
-        if (flaged.length !== this.numMines) {
-            return false;
-        }
-
-        return flaged.filter(({isMine}) => isMine).length === this.numMines;
+        return false;
     }
 
     // Left click
@@ -136,7 +141,7 @@ export default class MineSweeper {
                 continue;
             }
             curCell.isRevealed = true;
-            curCell.isFlaged = false;
+            curCell.isFlagged = false;
 
             // put nearby cells into the queue
             if (curCell.numMinesNearby > 0) {
@@ -169,7 +174,7 @@ export default class MineSweeper {
             return;
         }
 
-        this.gameboard[index].isFlaged = !this.gameboard[index].isFlaged;
+        this.gameboard[index].isFlagged = !this.gameboard[index].isFlagged;
 
         // check if won
         if (this.checkWinningCondition()) {
