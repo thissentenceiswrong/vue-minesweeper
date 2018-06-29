@@ -17,13 +17,14 @@
 <script>
     import flag from './cells/flag';
     import mine from './cells/mine';
+    import boom from './cells/boom';
     import number from './cells/number';
     import unrevealed from './cells/unrevealed';
 
     export default {
         name: "cell",
         props: ["index", 'item', "gamestate"],
-        components: {flag, mine, number, unrevealed},
+        components: {flag, mine, boom, number, unrevealed},
         methods: {},
         computed: {
             /**
@@ -39,8 +40,14 @@
              * number
              * flag
              * mine
+             * boom
              */
             currentCell: function () {
+                // you revealed the bomb
+                if (this.gamestate.triggered === this.index) {
+                    return "boom";
+                }
+
                 if (this.item.isFlagged) {
                     return "flag";
                 }

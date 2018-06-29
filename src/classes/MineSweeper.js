@@ -1,6 +1,6 @@
 import {xyToIndex, nearbyCells} from "./Helper";
 
-import shuffle from "shuffle-array"
+import shuffle from "shuffle-array";
 
 function idle() {
 }
@@ -38,24 +38,6 @@ export default class MineSweeper {
 
         this.generateMines();
         this.generateBoard();
-    }
-
-    /**
-     * 笨方法生成雷
-     */
-    generateMinesTheDullWay() {
-        const setMines = this.setMines;
-
-        for (let lop = 0; lop < this.numMines; lop++) {
-            // generate a random number range in [0, length)
-            let mine = Math.floor(Math.random() * this.gameboard.length);
-
-            while (setMines.has(mine)) {
-                mine = (mine + 1) % this.gameboard.length;
-            }
-
-            setMines.add(mine);
-        }
     }
 
     /**
@@ -112,8 +94,9 @@ export default class MineSweeper {
     /**
      * Game over
      * @param won: true if won
+     * @param pos: a pair of value x, y
      */
-    gameOver(won) {
+    gameOver(won, pos) {
         this.isGameOver = true;
 
         // reveal all mines
@@ -121,8 +104,8 @@ export default class MineSweeper {
             this.gameboard[each].isRevealed = true;
         }
 
-        this.onGameOver(won);
-        this.botOnGameOver(won);
+        this.onGameOver(won, pos);
+        this.botOnGameOver(won, pos);
     }
 
     checkWinningCondition() {
@@ -152,8 +135,7 @@ export default class MineSweeper {
         }
 
         if (this.isMine(x, y)) {
-            // todo: flag the one you clicked
-            this.gameOver(false);
+            this.gameOver(false, xyToIndex(x, y, this.numRow, this.numCol));
             return;
         }
 

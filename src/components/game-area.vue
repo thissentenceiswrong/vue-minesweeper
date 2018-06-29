@@ -40,13 +40,15 @@
                 widthCell: 40,
                 gamestate: {
                     isGameOver: false,
-                    isWon: false
+                    isWon: false,
+                    triggered: null
                 },
                 strGameOver: "",
                 onGameOver: (function (vueObj) {
-                    return function (won) {
+                    return function (won, pos) {
                         vueObj.gamestate.isGameOver = true;
                         vueObj.gamestate.isWon = won;
+                        vueObj.gamestate.triggered = pos;
 
                         const str = "Game Over! You " + (won ? "WIN" : "LOSE");
                         vueObj.strGameOver = str;
@@ -71,6 +73,8 @@
             restart: function () {
                 this.gamestate.isGameOver = false;
                 this.gamestate.isWon = false;
+                this.gamestate.triggered = null;
+
                 this.strGameOver = "";
                 this.minesweeper = new MineSweeper(9, 9, 10, this.onGameOver);
             },
