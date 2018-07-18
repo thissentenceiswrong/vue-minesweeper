@@ -3,8 +3,9 @@
         <h1>Settings</h1>
         <p>行数:<input type="number" v-model="row"></p>
         <p>列数:<input type="number" v-model="col"></p>
+        <p>地雷数:<input type="number" v-model="numMines"></p>
 
-        <button v-on:click="">Apply</button>
+        <button @click="btnApply">Apply</button>
     </div>
 </template>
 
@@ -13,17 +14,17 @@
         name: "Setting",
         data: function () {
             return {
-                row: 0,
-                col: 0
+                row: 9,
+                col: 9,
+                numMines: 10
             };
         },
-        computed: {
-        },
+        computed: {},
         methods: {
+            btnApply: function () {
+                this.$emit('newgame', [this.row, this.col, this.numMines]);
+            }
         },
-        created() {
-
-        }
     };
 </script>
 

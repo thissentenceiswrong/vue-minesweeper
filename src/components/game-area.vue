@@ -33,6 +33,7 @@
 
     export default {
         name: "GameArea",
+        props: ["conf"],
         components: {cell},
         data: function () {
             return {
@@ -76,7 +77,7 @@
                 this.gamestate.triggered = null;
 
                 this.strGameOver = "";
-                this.minesweeper = new MineSweeper(9, 9, 10, this.onGameOver);
+                this.minesweeper = new MineSweeper(this.conf[0], this.conf[1], this.conf[2], this.onGameOver);
             },
             /**
              * User left click one of the cells
