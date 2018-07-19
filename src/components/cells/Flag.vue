@@ -6,15 +6,22 @@
 </template>
 
 <script>
+    import {mapState} from "vuex";
+
     export default {
-        name: "flag",
-        props: ["wrong", "gamestate"],
+        props: ["item"],
         computed: {
+            ...mapState('game', {
+                isGameOver: state => state.isGameOver
+            }),
+            wrong: function () {
+                return this.isGameOver ? !this.item.isMine : false;
+            },
             objClass: function () {
                 return {
-                    flaged: !this.gamestate.isGameOver,
-                    wrongFlag: this.gamestate.isGameOver && this.wrong,
-                    rightFlag: this.gamestate.isGameOver && !this.wrong
+                    flaged: !this.isGameOver,
+                    wrongFlag: this.isGameOver && this.wrong,
+                    rightFlag: this.isGameOver && !this.wrong
                 };
             }
         }

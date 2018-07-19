@@ -2,32 +2,6 @@ function numDigits(x) {
     return Math.max(Math.floor(Math.log10(Math.abs(x))), 0) + 1;
 }
 
-function xyToIndex(x, y, maxX, maxY) {
-    if (hasUndefined([x, y, maxX, maxY])) {
-        throw "Undefined param";
-    }
-
-    return maxY * x + y;
-}
-
-/**
- * Convert index in range [0, x*y] to two number x and y
- * @param index
- * @param maxX
- * @param maxY
- * @returns {{x: number, y: number}}
- */
-function indexToxy(index, maxX, maxY) {
-    if (hasUndefined([index, maxX, maxY])) {
-        throw "Undefined param";
-    }
-
-    return {
-        x: Math.floor(index / maxY),
-        y: index % maxY
-    }
-}
-
 function hasUndefined(arr) {
     let hasUndefined = false;
     arr.forEach((e) => {
@@ -62,4 +36,4 @@ function nearbyCells(x, y, maxX, maxY) {
     return arr;
 }
 
-export {numDigits, xyToIndex, indexToxy, nearbyCells};
+export {numDigits, nearbyCells};

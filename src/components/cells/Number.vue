@@ -1,5 +1,5 @@
 <template>
-    <div id="number" v-bind:class="{gray: number !== 0}">
+    <div id="number">
         <div v-show="number">
             {{number}}
         </div>
@@ -8,8 +8,12 @@
 
 <script>
     export default {
-        name: "number",
-        props: ["number"]
+        props: ["index"],
+        computed: {
+            number: function() {
+                return this.$store.getters["game/cell"](this.index).numMinesNear;
+            }
+        }
     };
 </script>
 

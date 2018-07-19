@@ -4,7 +4,6 @@
 
 <script>
     export default {
-        name: "unrevealed"
     };
 </script>
 
@@ -13,7 +12,7 @@
         height: 40px;
         width: 40px;
 
-        background-color: black;
+        background-color: gray;
 
         cursor: pointer;
     }
