@@ -25,7 +25,6 @@
                 row = Math.max(row, 2);
                 col = Math.max(col, 2);
                 mine = Math.max(mine, 1);
-
             }
         }
     };

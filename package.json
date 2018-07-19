@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "dependencies": {
     "shuffle-array": "^1.0.1",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vuex": "^3.0.1"
   },
   "main": "index.js",
   "repository": "https://github.com/thissentenceiswrong/vue-minesweeper.git",
