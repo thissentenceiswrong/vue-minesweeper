@@ -2,10 +2,12 @@ import shuffle from "shuffle-array";
 import {nearbyCells} from "../../Helper";
 
 const state = {
-    row: 9,
-    col: 9,
-    mines: 10,
+    row: 0,
+    col: 0,
+    mines: 0,
     isGameOver: false,
+    isWon: null,
+    finalMove: null,
 
     setMines: new Set(),
     gameboard: [],
@@ -29,12 +31,12 @@ const getters = {
     },
 
     cell(state) {
-        return function(index) {
+        return function (index) {
             return state.gameboard[index];
-        }
+        };
     },
 
-    numMinesNearby(state, getters) {
+    numMinesAround(state, getters) {
         /**
          * 返回位于 x y 处的cell周围地雷的个数。
          * 如果当前cell是地雷，返回 null
@@ -66,8 +68,7 @@ const getters = {
         };
     },
 
-    checkWinningCondition(state) {
-        // todo: flag all unrevealed cells after winning
+    hasWin(state) {
         return state.gameboard.filter(
             ({isRevealed}) => !isRevealed
         ).length === state.mines;
@@ -87,6 +88,8 @@ const mutations = {
         state.col = col;
         state.mines = mines;
         state.isGameOver = false;
+        state.isWon = null;
+        state.finalMove = null;
 
         state.setMines = new Set();
         state.gameboard = [];
@@ -96,7 +99,7 @@ const mutations = {
                 isRevealed: false,
                 isMine: false,
                 isFlagged: false,
-                numMinesNearBy: 0
+                numMinesNear: 0
             });
         }
     },
@@ -128,7 +131,7 @@ const mutations = {
         }
     },
 
-    updateBoard(state, {index, isRevealed, isMine, isFlagged, numMinesNearBy}) {
+    updateBoard(state, {index, isRevealed, isMine, isFlagged, numMinesNear}) {
         const cell = state.gameboard[index];
 
         if (isRevealed !== undefined) {
@@ -140,14 +143,26 @@ const mutations = {
         if (isFlagged !== undefined) {
             cell.isFlagged = isFlagged;
         }
-        if (numMinesNearBy !== undefined) {
-            cell.numMinesNearBy = numMinesNearBy;
+        if (numMinesNear !== undefined) {
+            cell.numMinesNear = numMinesNear;
         }
     },
 
     gameOver(state, {won, finalMove}) {
-// todo
         state.isGameOver = true;
+        state.isWon = won;
+        state.finalMove = finalMove;
+
+        // reveal all mines
+        for (let each of state.setMines.values()) {
+            if (state.isWon) {
+                // If win, flag all mines
+                state.gameboard[each].isFlagged = true;
+            } else {
+                // if lose, reveal all mines
+                state.gameboard[each].isRevealed = true;
+            }
+        }
     },
 
 };
@@ -199,17 +214,17 @@ const actions = {
                 for (let index in state.gameboard) {
                     index = parseInt(index);
 
-                    const numMinesNearBy = getters.numMinesNearby(getters.indexToxy(index));
+                    const numMinesNear = getters.numMinesAround(getters.indexToxy(index));
 
                     commit("updateBoard", {
                         index: index,
-                        numMinesNearBy: numMinesNearBy
+                        numMinesNear: numMinesNear
                     });
                 }
             }
 
             // stop when near mine
-            if (curCell.numMinesNearBy !== 0) {
+            if (curCell.numMinesNear !== 0) {
                 continue;
             }
 
@@ -220,7 +235,7 @@ const actions = {
         }
 
         // check if won
-        if (getters.checkWinningCondition) {
+        if (getters.hasWin) {
             commit("gameOver", {
                 won: true,
                 finalMove: getters.xyToIndex(x, y)
@@ -231,8 +246,34 @@ const actions = {
     },
 
     // Right click
-    flagCell(state) {
-// todo
+    flagCell({commit, state, getters}, {x, y}) {
+        if (state.isGameOver) {
+            return;
+        }
+
+        const index = getters.xyToIndex(x, y);
+        const cell = state.gameboard[index];
+
+        // Do nothing if already revealed
+        if (cell.isRevealed) {
+            return;
+        }
+
+        // Toggle flag
+        commit("updateBoard", {
+            index,
+            isFlagged: !cell.isFlagged
+        });
+
+        // check if won
+        if (getters.hasWin) {
+            commit("gameOver", {
+                won: true,
+                finalMove: getters.xyToIndex(x, y)
+            });
+        } else {
+            // continue
+        }
     }
 };
 

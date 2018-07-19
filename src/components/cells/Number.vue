@@ -11,7 +11,7 @@
         props: ["index"],
         computed: {
             number: function() {
-                return this.$store.getters["game/cell"](this.index).numMinesNearBy;
+                return this.$store.getters["game/cell"](this.index).numMinesNear;
             }
         }
     };
