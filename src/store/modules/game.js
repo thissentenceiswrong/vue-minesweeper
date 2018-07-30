@@ -2,6 +2,9 @@ import shuffle from "shuffle-array";
 import {nearbyCells} from "../../Helper";
 
 const state = {
+    // This variable will not be reset
+    isLoading: false,
+
     row: 0,
     col: 0,
     mines: 0,
@@ -69,21 +72,23 @@ const getters = {
     },
 
     hasWin(state) {
-        return state.gameboard.filter(
-            ({isRevealed}) => !isRevealed
-        ).length === state.mines;
+        return function () {
+            return state.gameboard.filter(
+                ({isRevealed}) => !isRevealed
+            ).length === state.mines;
+        };
     },
 };
 
 const mutations = {
     /**
-     * Init values for variables
+     * Reset variables to empty/default values
      * @param state
      * @param row
      * @param col
      * @param numMines
      */
-    init(state, {row, col, mines}) {
+    reset(state, {row, col, mines}) {
         state.row = row;
         state.col = col;
         state.mines = mines;
@@ -93,15 +98,6 @@ const mutations = {
 
         state.setMines = new Set();
         state.gameboard = [];
-
-        for (let lop = 0; lop < state.row * state.col; lop++) {
-            state.gameboard.push({
-                isRevealed: false,
-                isMine: false,
-                isFlagged: false,
-                numMinesNear: 0
-            });
-        }
     },
 
     /**
@@ -131,6 +127,22 @@ const mutations = {
         }
     },
 
+    initBoard(state) {
+        for (let lop = 0; lop < state.row * state.col; lop++) {
+            state.gameboard.push({
+                isRevealed: false,
+                isMine: false,
+                isFlagged: false,
+                numMinesNear: 0
+            });
+        }
+    },
+
+    updateLoadingStatus(state, isLoading) {
+        state.isLoading = isLoading;
+    },
+
+    // todo: make this the vue way
     updateBoard(state, {index, isRevealed, isMine, isFlagged, numMinesNear}) {
         const cell = state.gameboard[index];
 
@@ -164,10 +176,24 @@ const mutations = {
             }
         }
     },
-
 };
 
 const actions = {
+    init({commit, state}, {row, col, mines}) {
+        commit("updateLoadingStatus", true);
+
+        new Promise(function (resolve) {
+            setTimeout(() => {
+                commit("reset", {
+                    row, col, mines
+                });
+
+                commit("initBoard");
+                resolve();
+            }, 500); // magic number?
+        }).then(() => commit("updateLoadingStatus", false));
+    },
+
     // Left click
     revealCell({commit, state, getters}, {x, y}) {
         if (state.isGameOver) {
@@ -204,6 +230,7 @@ const actions = {
                 isFlagged: false
             });
 
+            // todo: fix possible performance issue
             // The game just started, no mines generated
             // And player just made his first move
             // **The following code only run ONCE after init
@@ -235,13 +262,13 @@ const actions = {
         }
 
         // check if won
-        if (getters.hasWin) {
+        if (getters.hasWin()) {
             commit("gameOver", {
                 won: true,
                 finalMove: getters.xyToIndex(x, y)
             });
         } else {
-            // continue
+            // todo: continue
         }
     },
 
@@ -264,16 +291,6 @@ const actions = {
             index,
             isFlagged: !cell.isFlagged
         });
-
-        // check if won
-        if (getters.hasWin) {
-            commit("gameOver", {
-                won: true,
-                finalMove: getters.xyToIndex(x, y)
-            });
-        } else {
-            // continue
-        }
     }
 };
 

@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        game: game
+        game: game,
     },
     strict: true
 })

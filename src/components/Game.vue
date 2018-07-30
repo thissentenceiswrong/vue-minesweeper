@@ -1,24 +1,26 @@
 <template>
     <div>
         <h1>Game</h1>
-        <p>Mines Left: {{numMinesLeft}}</p>
-        <button @click="startGame">Start</button>
-        <div id="gameboard" v-bind:style="containerStyleObject">
-            <Cell id="cell"
-                  v-for="(item, index) in gameboard"
-                  :key="index"
+        <div id="loading" v-show="isLoading">Loading...</div>
+        <div v-show="!isLoading">
+            <p>Mines Left: {{numMinesLeft}}</p>
+            <div id="gameboard" v-bind:style="containerStyleObject">
+                <Cell id="cell"
+                      v-for="(item, index) in gameboard"
+                      :key="index"
 
-                  v-bind:index="index"
-                  v-bind:item="item"
-            >
-            </Cell>
-            <div id="clearFloat"></div>
+                      v-bind:index="index"
+                      v-bind:item="item"
+                >
+                </Cell>
+                <div id="clearFloat"></div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex';
+    import {mapState, mapActions} from 'vuex';
 
     import Cell from "./Cell";
 
@@ -31,27 +33,24 @@
         },
         computed: {
             ...mapState("game", {
-                row: state => state.row,
+                col: state => state.col,
                 gameboard: state => state.gameboard,
                 numMines: state => state.mines,
+                isLoading: state => state.isLoading
             }),
             numMinesLeft: function () {
                 return this.numMines - this.gameboard.filter(({isFlagged}) => isFlagged).length;
             },
             containerStyleObject: function () {
                 return {
-                    width: `${this.widthCell * this.row}px`
+                    width: `${this.widthCell * this.col}px`
                 };
             },
         },
         methods: {
-            startGame: function () {
-                this.$store.commit("game/init", {
-                    row: 9,
-                    col: 9,
-                    mines: 10
-                });
-            }
+            ...mapActions("game", [
+                "init"
+            ]),
         }
     };
 </script>
