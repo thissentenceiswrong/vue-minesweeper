@@ -33,7 +33,7 @@
                 visible: true,
             };
         },
-        created() {
+        mounted() {
             this.startNewGame();
         },
         computed: {
