@@ -6,8 +6,8 @@
 </template>
 
 <script>
-    import Setting from "./Setting";
-    import Game from "./Game";
+    import Setting from "./components/Setting";
+    import Game from "./components/Game";
 
     export default {
         components: {Setting, Game}

@@ -1,39 +1,50 @@
 {
-  "name": "minesweeper",
-  "version": "0.0.1",
+  "name": "tmp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
   "dependencies": {
     "shuffle-array": "^1.0.1",
-    "vue": "^2.5.16",
+    "vue": "^2.5.17",
     "vuex": "^3.0.1"
   },
-  "main": "index.js",
-  "repository": "https://github.com/thissentenceiswrong/vue-minesweeper.git",
-  "author": "Jeff <noojeff@gmail.com>",
-  "license": "MIT",
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "clean-webpack-plugin": "^0.1.19",
-    "cross-env": "^5.1.4",
-    "css-loader": "^0.28.11",
-    "fs-extra": "^6.0.1",
-    "gh-pages": "^1.2.0",
-    "html-webpack-plugin": "^3.1.0",
-    "node-sass": "^4.8.3",
-    "sass-loader": "^6.0.7",
-    "style-loader": "^0.20.3",
-    "vue-loader": "^14.2.2",
-    "vue-template-compiler": "^2.5.16",
-    "webpack": "^4.2.0",
-    "webpack-cli": "^2.0.13",
-    "webpack-dev-server": "^3.1.1",
-    "webpack-merge": "^4.1.2"
+    "@vue/cli-plugin-babel": "^3.2.0",
+    "@vue/cli-plugin-eslint": "^3.2.0",
+    "@vue/cli-service": "^3.2.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0-0",
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.5.17"
   },
-  "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --mode=development --open --hot --host=0.0.0.0 --config webpack.dev.js",
-    "dev": "cross-env NODE_ENV=development webpack --mode=development --progress --hide-modules  --config webpack.dev.js",
-    "build": "cross-env NODE_ENV=production webpack --mode=production --progress --hide-modules  --config webpack.prod.js"
-  }
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ]
 }
