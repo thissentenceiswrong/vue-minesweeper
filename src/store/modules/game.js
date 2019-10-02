@@ -179,7 +179,7 @@ const mutations = {
 };
 
 const actions = {
-    init({commit, state}, {row, col, mines}) {
+    init({commit}, {row, col, mines}) {
         commit("updateLoadingStatus", true);
 
         new Promise(function (resolve) {
@@ -267,8 +267,6 @@ const actions = {
                 won: true,
                 finalMove: getters.xyToIndex(x, y)
             });
-        } else {
-            // todo: continue
         }
     },
 
